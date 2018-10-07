@@ -1,8 +1,6 @@
 /**
  * OPEN TICKETS
- * - rewrite conditional to check if line intersect empty area
  * - red and black colors
- * - possiblity of generating two or three more replicants
  * - prevent visible shifts when genenrate muiltiple lines
  */
 
@@ -64,7 +62,7 @@ function setup() {
 
             // generate multiple lines 20% of the time
             const temp = floor(random(10));
-            if (temp == 0 || temp == 1) {
+            if (temp == 0) {
                 x1 += 30;
                 y1 += 30;
                 x2 += 30;
@@ -87,6 +85,17 @@ function setup() {
                 index++;
             }
             index++;    
+        } else if (temp == 1) {
+            x1 += 30;
+            y1 += 30;
+            x2 += 30;
+            y2 += 30;
+            x3 += 30;
+            y3 += 30;
+            strokeWeight(stWt/2);
+            line(x1,y1,x2,y2);
+            line(x1,y1,x3,y3);
+            index++;
         }
     }
 }
