@@ -26,5 +26,5 @@ Occasional Generation of Multiple Lines
 Calculation of Variances
 </h2>
 <p>
-Crazy trig stuff was done to figure out the minute discrepancies of the mostly perpendicular lines.
+Lines are generated along two perpendicular axes with a specified degree of random variance. Colors are assigned randomly. Show penis.
 </p>
