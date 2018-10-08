@@ -4,10 +4,8 @@
    Andrew Covert - Oct 8, 2018
 
  * OPEN TICKETS
- * - rewrite conditional to check if line intersect empty area
- * - red and black colors
- * - possiblity of generating two or three more replicants
  * - prevent visible shifts when genenrate muiltiple lines
+ * - write two random words of latin in the empty space with one of the colors used for lines
  */
 
 function getTanFromDegrees(degrees) {
@@ -110,7 +108,7 @@ function setup() {
             line(x1,y1,x2,y2);
             line(x1,y1,x3,y3);
             strokeWeight(random(6));
-            ellipse(e1, e2, 100, 100);
+            // ellipse(e1, e2, 100, 100);
 
             // generate multiple lines 20% of the time
             const temp = floor(random(10));
