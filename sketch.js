@@ -18,7 +18,8 @@ function setup() {
     const multiplier = ((high+wide)/2);
     const anglePlay = 5; //+ or - 2.5 degrees from 0 degrees
     const angleOffset = random(45); //change everything +0 to 45 degrees
-    
+    const img = loadImage("TasteTheRainbow.jpg");
+
     //Random variables
     let rgbone = floor(random(256));
     let rgbtwo = floor(random(256));
@@ -29,7 +30,6 @@ function setup() {
     
     createCanvas(wide, high);
     background(0); 
-    fill(0);
     // generate point for empty space
     const e1 = random(wide*(1/4),wide*(3/4)); // x
     const e2 = random(high*(1/4),high*(3/4)); // y
@@ -50,17 +50,17 @@ function setup() {
         
         //move up 90 degrees, left or right of y-axis
         if (random()<0.5) {
-        let temp = height;
-        height = width;
-        //console.log("height = "+height);
-        if (random()<0.5) {
-            width = temp;
-            //console.log("width1 = "+height);
-        }
-        else {
-            width = temp * -1;
-            //console.log("width2 = "+height);
-        }
+            let temp = height;
+            height = width;
+            //console.log("height = "+height);
+            if (random()<0.5) {
+                width = temp;
+                //console.log("width1 = "+height);
+            }
+            else {
+                width = temp * -1;
+                //console.log("width2 = "+height);
+            }
         }
         const slope = height / width;
         let x1 = random(wide);
@@ -69,11 +69,11 @@ function setup() {
         const offset = y1 - (slope * x1);
 
         // coordinates at right end of plane
-        let x2 = wide;
+        let x2 = wide+100;
         let y2 = (slope * x2) + offset;
 
         // coordinates at the left of plane
-        let x3 = 0;
+        let x3 = -100;
         let y3 = (slope * x3) + offset;
 
         // computations to see if lines and spaces interconnect
@@ -96,18 +96,22 @@ function setup() {
             if (stWt<10) {
                 stWt = 10;
             }
-            strokeWeight(stWt);
+            //strokeWeight(stWt);
             
+            //texture(img);
             if(random()<0.5){
-            stroke(rgbone,rgbtwo,rgbthree);
+                fill(rgbone,rgbtwo,rgbthree);
             }
             else{
-            stroke(rgbonetwo,rgbtwotwo,rgbthreetwo);
+                fill(rgbonetwo,rgbtwotwo,rgbthreetwo);
             }
             
-            line(x1,y1,x2,y2);
-            line(x1,y1,x3,y3);
-            strokeWeight(random(6));
+            let strokeTemp = multiplier*.0125;
+            //quad(x2, y2-strokeTemp, x2, y2+strokeTemp, x1, y1+strokeTemp, x1, y1-strokeTemp, );
+            quad(x3, y3+strokeTemp, x2, y2+strokeTemp, x2, y2-strokeTemp, x3, y3-strokeTemp);
+            //line(x1,y1,x2,y2);
+            //line(x1,y1,x3,y3);
+            //strokeWeight(random(6));
             // ellipse(e1, e2, 100, 100);
 
             // generate multiple lines 20% of the time
@@ -119,9 +123,11 @@ function setup() {
                 y2 += 30;
                 x3 += 30;
                 y3 += 30;
-                strokeWeight(stWt/2);
-                line(x1,y1,x2,y2);
-                line(x1,y1,x3,y3);
+                strokeTemp = strokeTemp/2;
+                quad(x3, y3+strokeTemp, x2, y2+strokeTemp, x2, y2-strokeTemp, x3, y3-strokeTemp);
+                //strokeWeight(stWt/2);
+                //line(x1,y1,x2,y2);
+                //line(x1,y1,x3,y3);
                 index++;
                 x1 += 30;
                 y1 += 30;
@@ -129,9 +135,11 @@ function setup() {
                 y2 += 30;
                 x3 += 30;
                 y3 += 30;
-                strokeWeight(stWt/3);
-                line(x1,y1,x2,y2);
-                line(x1,y1,x3,y3);
+                strokeTemp = (strokeTemp*2)/3;
+                quad(x3, y3+strokeTemp, x2, y2+strokeTemp, x2, y2-strokeTemp, x3, y3-strokeTemp);
+                //strokeWeight(stWt/3);
+                //line(x1,y1,x2,y2);
+                //line(x1,y1,x3,y3);
                 index++;
             } else if (temp == 1) {
                 x1 += 30;
@@ -140,9 +148,11 @@ function setup() {
                 y2 += 30;
                 x3 += 30;
                 y3 += 30;
-                strokeWeight(stWt/2);
-                line(x1,y1,x2,y2);
-                line(x1,y1,x3,y3);
+                strokeTemp = strokeTemp/2;
+                quad(x3, y3+strokeTemp, x2, y2+strokeTemp, x2, y2-strokeTemp, x3, y3-strokeTemp);
+                //strokeWeight(stWt/2);
+                //line(x1,y1,x2,y2);
+                //line(x1,y1,x3,y3);
                 index++;
             }
         }
