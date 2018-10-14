@@ -1,7 +1,7 @@
 /**
  Authors:
    Sam Parsons
-   Andrew Covert - Oct 8, 2018
+   Andrew Covert 10/8/18 - 10/13/18
 
  * OPEN TICKETS
  * - prevent visible shifts when genenrate muiltiple lines
@@ -13,28 +13,44 @@ function getTanFromDegrees(degrees) {
 }
 
 function setup() {
-    const wide = 1920;
+    //Constant Variables:
+    const wide = 1920; 
     const high = 1080;
     const multiplier = ((high+wide)/2);
-    const anglePlay = 5; //+ or - 2.5 degrees from 0 degrees
-    const angleOffset = random(45); //change everything +0 to 45 degrees
-    const img = loadImage("TasteTheRainbow.jpg");
-
-    //Random variables
-    let rgbone = floor(random(256));
-    let rgbtwo = floor(random(256));
-    let rgbthree = floor(random(256));
-    let rgbonetwo = floor(random(256));
-    let rgbtwotwo = floor(random(256));
-    let rgbthreetwo = floor(random(256));
+    const anglePlay = 5; //variation in degrees from axes TBD
+    const angleOffset = random(5); //offset axes TBD
+    const colorVariation = 90;
+    const childVariation = 60;
+    const limit = 10; // specifies number of parent lines produced
+    const perpendicular = true; //true if want perpendicular pattern, false if only horizontal
     
-    createCanvas(wide, high);
-    background(0); 
+    //Random variables
+    let rgb1 = floor(random(256));
+    let rgb2 = floor(random(256));
+    let rgb3 = floor(random(256));
+    let rgb1c1 = rgb1+floor(random(-1*colorVariation,colorVariation));
+    let rgb2c1 = rgb2+floor(random(-1*colorVariation,colorVariation));
+    let rgb3c1 = rgb3+floor(random(-1*colorVariation,colorVariation));
+    let rgb1c2 = rgb1c1+floor(random(-1*colorVariation,colorVariation));
+    let rgb2c2 = rgb2c1+floor(random(-1*colorVariation,colorVariation));
+    let rgb3c2 = rgb3c1+floor(random(-1*colorVariation,colorVariation));
+    let rgb21 = floor(random(256));
+    let rgb22 = floor(random(256));
+    let rgb23 = floor(random(256));
+    let rgb21c1 = rgb21+floor(random(-1*colorVariation,colorVariation));
+    let rgb22c1 = rgb22+floor(random(-1*colorVariation,colorVariation));
+    let rgb23c1 = rgb23+floor(random(-1*colorVariation,colorVariation));
+    let rgb21c2 = rgb21c1+floor(random(-1*colorVariation,colorVariation));
+    let rgb22c2 = rgb22c1+floor(random(-1*colorVariation,colorVariation));
+    let rgb23c2 = rgb23c1+floor(random(-1*colorVariation,colorVariation));
+        
     // generate point for empty space
     const e1 = random(wide*(1/4),wide*(3/4)); // x
     const e2 = random(high*(1/4),high*(3/4)); // y
 
-    const limit = 8; // specifies number of lines produced
+    createCanvas(wide, high);
+    background(0); 
+    
     let index = 0;
 
     while (index < limit) {
@@ -44,22 +60,18 @@ function setup() {
         let height = width * getTanFromDegrees(angle);
         //50% chance flip across x-axis      
         if (random()<0.5) {
-        height = -1*height;
-        //console.log("height inverted: " + height);
+            height = -1 * height;
         }
         
         //move up 90 degrees, left or right of y-axis
-        if (random()<0.5) {
+        if (perpendicular && random()<0.5) {
             let temp = height;
             height = width;
-            //console.log("height = "+height);
             if (random()<0.5) {
                 width = temp;
-                //console.log("width1 = "+height);
             }
             else {
                 width = temp * -1;
-                //console.log("width2 = "+height);
             }
         }
         const slope = height / width;
@@ -69,92 +81,124 @@ function setup() {
         const offset = y1 - (slope * x1);
 
         // coordinates at right end of plane
-        let x2 = wide+100;
+        let x2 = wide*2;
         let y2 = (slope * x2) + offset;
 
         // coordinates at the left of plane
-        let x3 = -100;
+        let x3 = -wide;
         let y3 = (slope * x3) + offset;
 
         // computations to see if lines and spaces interconnect
         const sameX = (slope*e1) + offset;
         const sameY = (e2 - offset) / slope;
-
         const thresh = (multiplier*.25);
         
         // if the coordinates of both points are not within a given distance
         // of the empty space coordinates
         if ((abs(e1-x1) < thresh) && ((abs(e2-y1) < thresh))) {
-            console.log('origin point too close to empty space');
-        } else if (abs(e2-sameX) < thresh) {
-
-        } else if (abs(e1-sameY) < thresh) {
-
-        } else {
-
-            let stWt = random(multiplier*.025);
-            if (stWt<10) {
-                stWt = 10;
-            }
-            //strokeWeight(stWt);
-            
-            //texture(img);
-            if(random()<0.5){
-                fill(rgbone,rgbtwo,rgbthree);
+            //console.log('origin point too close to empty space');
+        }
+        else if (abs(e2-sameX) < thresh) {
+        }
+        else if (abs(e1-sameY) < thresh) {
+        }
+        else {            
+            let colorFlag = random();
+            if(colorFlag<0.5){
+                stroke(rgb1,rgb2,rgb3);
+                fill(rgb1,rgb2,rgb3);
             }
             else{
-                fill(rgbonetwo,rgbtwotwo,rgbthreetwo);
+                stroke(rgb21,rgb22,rgb23);
+                fill(rgb21,rgb22,rgb23);
+            }
+            let strokeTemp = random(multiplier*.003,multiplier*.012);
+            if(slope>0) {
+                quad(x3-strokeTemp, y3+strokeTemp, x2-strokeTemp, y2+strokeTemp, x2+strokeTemp, y2-strokeTemp, x3+strokeTemp, y3-strokeTemp);
+            }
+            else {
+                quad(x3-strokeTemp, y3-strokeTemp, x2-strokeTemp, y2-strokeTemp, x2+strokeTemp, y2+strokeTemp, x3+strokeTemp, y3+strokeTemp);
             }
             
-            let strokeTemp = multiplier*.0125;
-            //quad(x2, y2-strokeTemp, x2, y2+strokeTemp, x1, y1+strokeTemp, x1, y1-strokeTemp, );
-            quad(x3, y3+strokeTemp, x2, y2+strokeTemp, x2, y2-strokeTemp, x3, y3-strokeTemp);
-            //line(x1,y1,x2,y2);
-            //line(x1,y1,x3,y3);
-            //strokeWeight(random(6));
-            // ellipse(e1, e2, 100, 100);
+            //Placeholder for empty space
+            //ellipse(e1, e2, multiplier*.18, multiplier*.18);
 
             // generate multiple lines 20% of the time
             const temp = floor(random(10));
             if (temp == 0) {
-                x1 += 30;
-                y1 += 30;
-                x2 += 30;
-                y2 += 30;
-                x3 += 30;
-                y3 += 30;
+                x1 += childVariation;
+                y1 += childVariation;
+                x2 += childVariation;
+                y2 += childVariation;
+                x3 += childVariation;
+                y3 += childVariation;
+                if(colorFlag<0.5){
+                    stroke(rgb1c1,rgb2c1,rgb3c1);
+                    fill(rgb1c1,rgb2c1,rgb3c1);
+                }
+                else{
+                    stroke(rgb21c1,rgb22c1,rgb23c1);
+                    fill(rgb21c1,rgb22c1,rgb23c1);
+                }
                 strokeTemp = strokeTemp/2;
-                quad(x3, y3+strokeTemp, x2, y2+strokeTemp, x2, y2-strokeTemp, x3, y3-strokeTemp);
+                if(slope>0) {
+                    quad(x3-strokeTemp, y3+strokeTemp, x2-strokeTemp, y2+strokeTemp, x2+strokeTemp, y2-strokeTemp, x3+strokeTemp, y3-strokeTemp);
+                }
+                else {
+                    quad(x3-strokeTemp, y3-strokeTemp, x2-strokeTemp, y2-strokeTemp, x2+strokeTemp, y2+strokeTemp, x3+strokeTemp, y3+strokeTemp);
+                }
                 //strokeWeight(stWt/2);
                 //line(x1,y1,x2,y2);
                 //line(x1,y1,x3,y3);
                 index++;
-                x1 += 30;
-                y1 += 30;
-                x2 += 30;
-                y2 += 30;
-                x3 += 30;
-                y3 += 30;
+                x1 += childVariation;
+                y1 += childVariation;
+                x2 += childVariation;
+                y2 += childVariation;
+                x3 += childVariation;
+                y3 += childVariation;
+                if(colorFlag<0.5){
+                    stroke(rgb1c2,rgb2c2,rgb3c2);
+                    fill(rgb1c2,rgb2c2,rgb3c2);
+                }
+                else{
+                    stroke(rgb21c2,rgb22c2,rgb23c2);
+                    fill(rgb21c2,rgb22c2,rgb23c2);
+                }
                 strokeTemp = (strokeTemp*2)/3;
-                quad(x3, y3+strokeTemp, x2, y2+strokeTemp, x2, y2-strokeTemp, x3, y3-strokeTemp);
-                //strokeWeight(stWt/3);
-                //line(x1,y1,x2,y2);
-                //line(x1,y1,x3,y3);
-                index++;
+                if(slope>0) {
+                    quad(x3-strokeTemp, y3+strokeTemp, x2-strokeTemp, y2+strokeTemp, x2+strokeTemp, y2-strokeTemp, x3+strokeTemp, y3-strokeTemp);
+                }
+                else {
+                    quad(x3-strokeTemp, y3-strokeTemp, x2-strokeTemp, y2-strokeTemp, x2+strokeTemp, y2+strokeTemp, x3+strokeTemp, y3+strokeTemp);
+                }
             } else if (temp == 1) {
-                x1 += 30;
-                y1 += 30;
-                x2 += 30;
-                y2 += 30;
-                x3 += 30;
-                y3 += 30;
+                x1 += childVariation;
+                y1 += childVariation;
+                x2 += childVariation;
+                y2 += childVariation;
+                x3 += childVariation;
+                y3 += childVariation;
+                if(colorFlag<0.5){
+                    stroke(rgb1c1,rgb2c1,rgb3c1);
+                    fill(rgb1c1,rgb2c1,rgb3c1);
+                }
+                else{
+                    stroke(rgb21c1,rgb22c1,rgb23c1);
+                    fill(rgb21c1,rgb22c1,rgb23c1);
+                }
                 strokeTemp = strokeTemp/2;
-                quad(x3, y3+strokeTemp, x2, y2+strokeTemp, x2, y2-strokeTemp, x3, y3-strokeTemp);
+                if(slope>0) {
+                    quad(x3-strokeTemp, y3+strokeTemp, x2-strokeTemp, y2+strokeTemp, x2+strokeTemp, y2-strokeTemp, x3+strokeTemp, y3-strokeTemp);
+                }
+                else {
+                    quad(x3-strokeTemp, y3-strokeTemp, x2-strokeTemp, y2-strokeTemp, x2+strokeTemp, y2+strokeTemp, x3+strokeTemp, y3+strokeTemp);
+                }
                 //strokeWeight(stWt/2);
                 //line(x1,y1,x2,y2);
                 //line(x1,y1,x3,y3);
-                index++;
             }
+            index++;
         }
     }
 }
