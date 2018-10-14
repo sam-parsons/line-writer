@@ -4,8 +4,9 @@
    Andrew Covert 10/8/18 - 10/13/18
 
  * OPEN TICKETS
- * - prevent visible shifts when genenrate muiltiple lines
+ * - prevent visible shifts when generate muiltiple lines
  * - write two random words of latin in the empty space with one of the colors used for lines
+ * - create vertical variablity, maybe even try to see if it can be near some lines
  */
 
 function getTanFromDegrees(degrees) {
@@ -23,6 +24,31 @@ function setup() {
     const childVariation = 60;
     const limit = 10; // specifies number of parent lines produced
     const perpendicular = true; //true if want perpendicular pattern, false if only horizontal
+    let randText = ""; // string to be generated at end of setup
+    const url = 'http://www.randomtext.me/api/gibberish/ul-1/2-3';
+    let tempRandText = '';
+
+    // get random text
+    fetch(url)
+    .then(res => res.json())
+    .then((out) => {
+        console.log('this is json ', out);
+        tempRandText = out.text_out;
+        for (let i = 9; i < tempRandText.length; i++) {
+            if (tempRandText[i] == "<") {
+                tempRandText = "";
+            } else {
+                randText += tempRandText[i];
+            }
+        }
+        randText = randText.toLowerCase();
+        console.log(randText);
+        // write text in open space
+        textSize(random(40) + 32)
+        text(randText, e1-(20*randText.length), e2-380); // x shift due to string length, but y shift is arbitrary
+        console.log('string written');
+    })
+    .catch(err => { throw err });
     
     //Random variables
     let rgb1 = floor(random(256));
@@ -201,6 +227,10 @@ function setup() {
             index++;
         }
     }
+
+    // method to generate random text
+
+
 }
 
 function draw() {
