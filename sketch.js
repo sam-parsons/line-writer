@@ -2,11 +2,12 @@
  Authors:
    Sam Parsons
    Andrew Covert 10/8/18 - 10/13/18
-
  * OPEN TICKETS
  * - prevent visible shifts when generate muiltiple lines
  * - write two random words of latin in the empty space with one of the colors used for lines
  * - create vertical variablity, maybe even try to see if it can be near some lines
+ * - move right side empty space barrier back to no more bleeding
+ * - get position and dimension information about the text and format accordingly 
  */
 
 function getTanFromDegrees(degrees) {
@@ -25,33 +26,12 @@ function setup() {
     const limit = 10; // specifies number of parent lines produced
     const perpendicular = true; //true if want perpendicular pattern, false if only horizontal
     let randText = ""; // string to be generated at end of setup
-    const url = 'http://www.randomtext.me/api/gibberish/ul-1/2-3';
+    const url = 'http://www.randomtext.me/api/gibberish/ul-1/2';
     let tempRandText = '';
-
-    // get random text
-    fetch(url)
-    .then(res => res.json())
-    .then((out) => {
-        console.log('this is json ', out);
-        tempRandText = out.text_out;
-        for (let i = 9; i < tempRandText.length; i++) {
-            if (tempRandText[i] == "<") {
-                tempRandText = "";
-            } else {
-                randText += tempRandText[i];
-            }
-        }
-        randText = randText.toLowerCase();
-        console.log(randText);
-        // write text in open space
-        textSize(random(40) + 32)
-        text(randText, e1-(20*randText.length), e2-380); // x shift due to string length, but y shift is arbitrary
-        console.log('string written');
-    })
-    .catch(err => { throw err });
-    
-    //Random variables
-    let rgb1 = floor(random(256));
+	const fonts = ['Charmonman', 'Quicksand', 'Indie Flower'];
+	
+	//Random Variables
+	let rgb1 = floor(random(256));
     let rgb2 = floor(random(256));
     let rgb3 = floor(random(256));
     let rgb1c1 = rgb1+floor(random(-1*colorVariation,colorVariation));
@@ -69,13 +49,70 @@ function setup() {
     let rgb21c2 = rgb21c1+floor(random(-1*colorVariation,colorVariation));
     let rgb22c2 = rgb22c1+floor(random(-1*colorVariation,colorVariation));
     let rgb23c2 = rgb23c1+floor(random(-1*colorVariation,colorVariation));
-        
-    // generate point for empty space
-    const e1 = random(wide*(1/4),wide*(3/4)); // x
-    const e2 = random(high*(1/4),high*(3/4)); // y
+	let textrgb1 = 0;
+	let textrgb2 = 0;
+	let textrgb3 = 0;
+	if (random() < 0.5) {
+		let textrgb1 = rgb1;
+		let textrgb2 = rgb2;
+		let textrgb3 = rgb3;
+	}
+	else {
+		let textrgb1 = rgb21;
+		let textrgb2 = rgb22;
+		let textrgb3 = rgb23;
+	}
 
+	//create canvas and background
     createCanvas(wide, high);
     background(0); 
+
+    // generate point for empty space
+    const e1 = random(wide*(1/4),wide*(9/16)); // x
+    const e2 = random(high*(3/16),high*(3/4)); // y
+	
+    // get and print random text
+    fetch(url)
+    .then(res => res.json())
+    .then((out) => {
+        console.log('this is json ', out);
+        tempRandText = out.text_out;
+        for (let i = 9; i < tempRandText.length; i++) {
+            if (tempRandText[i] == "<") {
+                tempRandText = "";
+            } else {
+                randText += tempRandText[i];
+            }
+        }
+        //randText = randText.toLowerCase();
+		randText = randText.toUpperCase();
+        console.log(randText);
+        // write text in open space
+        //set size
+		textSize(random(20) + 60);
+		//set color 
+		stroke(textrgb1,textrgb2,textrgb3);
+        //set style
+		if (random() < 0.33) {
+			textStyle(NORMAL);
+		}
+		else if (random() < 0.5) {
+			textStyle(ITALIC);
+		}
+		else {
+			textStyle(BOLD);
+		}
+			
+		//Set Font
+		let fntIndex = floor(random(fonts.length));
+        textFont(fonts[fntIndex]);	
+        console.log(fonts[fntIndex]);
+        //Draw Text
+		text(randText, e1-(20*randText.length), e2-100); // x shift due to string length, but y shift is arbitrary
+        console.log('string written');
+    })
+    .catch(err => { throw err });
+    
     
     let index = 0;
 
