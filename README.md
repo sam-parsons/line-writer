@@ -1,5 +1,4 @@
 # line-writer
-Line Writer using p5.js
 
 Inspired by the artwork of Don Q. Hollis
 
