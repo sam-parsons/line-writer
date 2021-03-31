@@ -1,31 +1,22 @@
 # line-writer
 
-Inspired by the artwork of Don Q. Hollis
+inspired by the artwork of Don Q. Hollis
 
 <a href="https://sam-parsons-line-writer.glitch.me">Remix on Glitch</a>
 
 ![](don.gif)
 
 
-<h1>Features</h1>
+## features
 
-<h4>
-Randomly Placed Empty Space
-</h4>
-<p>
-Every generation has one randomly positioned area on the canvas where lines are not allowed to intersect.  This space can be a placeholder for another object, always appropriately placed.
-</p>
+#### ``randomly placed focal point``
 
-<h4>
-Occasional Generation of Multiple Lines
-</h4>
-<p>
-20% of all lines drawn results in 1 or 2 "child" lines. Each lines is thinner and drawn parralell, displaced from the parent line.
-</p>
+every generation has one randomly positioned area on the canvas where lines are not allowed to intersect.  this space can be a placeholder for another object, always appropriately placed.
 
-<h4>
-Calculation of Variances
-</h4>
-<p>
-Lines are generated along two perpendicular axes with a specified degree of random variance. Colors are assigned randomly.
-</p>
+#### ``occasional generation of multiple laterals``
+
+20% of all lines drawn results in 1 or 2 "child" lines. each lines is thinner and drawn parralell, displaced from the parent line.
+
+#### ``calculation of variances``
+
+lines are generated along two perpendicular axes with a specified degree of random variance. color theme pairs are assigned randomly.
