@@ -4,7 +4,7 @@ Inspired by the artwork of Don Q. Hollis
 
 <a href="https://sam-parsons-line-writer.glitch.me">Remix on Glitch</a>
 
-![](ani.gif)
+![](donII.gif)
 
 
 <h1>Features</h1>
